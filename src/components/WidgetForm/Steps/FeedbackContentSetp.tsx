@@ -1,13 +1,21 @@
-import { ArrowLeft } from "phosphor-react";
+import { ArrowLeft, Camera } from "phosphor-react";
+import { useState } from "react";
 import { FeedbackType, feedbackTypes } from "..";
 import { CloseButton } from "../../CloseButton";
+import { ScreenShotButton } from "../ScreenShotButton";
 
 interface FeedbackContentStepProps {
     feedbackType: FeedbackType;
     onFeedbackRestartRequested: () => void;
 }
 
-export function FeedbackContentStep({feedbackType, onFeedbackRestartRequested}: FeedbackContentStepProps) {
+export function FeedbackContentStep({
+    feedbackType, 
+    onFeedbackRestartRequested}: FeedbackContentStepProps) {
+
+    //sabe quando a foto foi tirada por causa do useState
+    const [screenshot, setScreenshot] = useState<string | null>(null)
+    
     const feedbackTypeInfo = feedbackTypes[feedbackType]
     
     return(
@@ -28,6 +36,10 @@ export function FeedbackContentStep({feedbackType, onFeedbackRestartRequested}: 
                     placeholder="Conte com detalhes o que está acontecendo"
                 ></textarea>
                 <footer className="flex gap-2 mt-2">
+                    <ScreenShotButton 
+                        screenshot={screenshot}
+                        onScreenshotTook={setScreenshot}
+                    />
                     <button type="submit" className="p-2 bg-brand-500 rounded-md border-transparent flex-1 flex justify-center items-center text-sm hover:bg-brand-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 transition-colors">
                         Enviar feedback
                     </button>
