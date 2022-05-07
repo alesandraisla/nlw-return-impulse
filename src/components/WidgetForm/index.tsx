@@ -5,6 +5,7 @@ import thoughtImageUrl from "../../assets/thought.svg";
 import { useState } from "react";
 import { FeedbackTypeStep } from "./Steps/FeedbackTypeStep";
 import { FeedbackContentStep } from "./Steps/FeedbackContentSetp";
+import { FeedbackSuccessStep } from "./Steps/FeedbackSuccessStep";
 
 
 export const feedbackTypes = {
@@ -32,11 +33,12 @@ export const feedbackTypes = {
 }
 export type FeedbackType = keyof typeof feedbackTypes;
 
-
 export function WidgetForm() {
     const [ feedbackType, setFeedbackType] = useState<FeedbackType | null>(null)
-    
+    const [ feedbackSent, setFeedbackSent] = useState(false);
+
     function handleRestartFeedback() {
+        setFeedbackSent(false)
         setFeedbackType(null)
     }
     
@@ -47,14 +49,20 @@ export function WidgetForm() {
                         items-center 
                         shadow-lg w-[calc(100vw-2rem)] md:w-auto"
         >
-
-            {!feedbackType ? (
+            { feedbackSent ? (
+                <FeedbackSuccessStep onFeedbackRestartRequested={handleRestartFeedback}/>
+            ): (
+                <>
+                {!feedbackType ? (
                 <FeedbackTypeStep onFeedbackTypeChanged={setFeedbackType} />
             ) : (
                 <FeedbackContentStep 
                     feedbackType={feedbackType}
                     onFeedbackRestartRequested={handleRestartFeedback}
+                    onFeedbackSent={() => setFeedbackSent(true)}
                 />
+            )}
+                </>
             )}
             <footer className="text-xs text-neutral-400">
                 Feito com ♥ pela <a className="underline underline-offset-2" href="https://rocketseat.com.br">Rocketseat</a>
